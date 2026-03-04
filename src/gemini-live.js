@@ -4,8 +4,8 @@
  * Supports both API key and OAuth2 access token auth.
  */
 
-const WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1.GenerativeService.BidiGenerateContent'
-const MODEL = 'models/gemini-1.5-flash-latest'
+const WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent'
+const MODEL = 'models/gemini-2.5-flash-native-audio-latest'
 
 const SYSTEM_INSTRUCTION = `Eres el sumiller y recepcionista virtual de Altofuego, un restaurante especializado en brasa de alta cocina. Tu tono es sofisticado pero acogedor. Ayuda a los clientes a conocer el menú y gestionar sus reservas. Hablas perfectamente castellano.`
 
@@ -113,19 +113,37 @@ export class GeminiLive {
 
             }
         }
+        console.log('[GeminiLive] Enviant Setup...', setupMsg)
         this.ws.send(JSON.stringify(setupMsg))
     }
 
     /**
-     * Handle incoming WebSocket messages
+     * Handle incoming WebSocket messages (text or binary Blob)
      * @param {MessageEvent} event
      */
     _handleMessage(event) {
+        // Gemini Live API can send messages as Blobs — read as text first
+        if (event.data instanceof Blob) {
+            event.data.text().then(text => this._parseMessage(text))
+            return
+        }
+        if (event.data instanceof ArrayBuffer) {
+            this._parseMessage(new TextDecoder().decode(event.data))
+            return
+        }
+        this._parseMessage(event.data)
+    }
+
+    /**
+     * Parse and dispatch a JSON message string
+     * @param {string} raw
+     */
+    _parseMessage(raw) {
         let msg
         try {
-            msg = JSON.parse(event.data)
+            msg = JSON.parse(raw)
         } catch {
-            console.warn('[GeminiLive] Non-JSON message received')
+            console.warn('[GeminiLive] Non-JSON message:', raw?.slice?.(0, 100))
             return
         }
 
