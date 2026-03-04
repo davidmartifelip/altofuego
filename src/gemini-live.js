@@ -106,7 +106,11 @@ export class GeminiLive {
                 },
                 systemInstruction: {
                     parts: [{ text: SYSTEM_INSTRUCTION }]
-                }
+                },
+                // Activa esto para ver en la consola lo que Gemini entiende
+                inputAudioTranscription: { enabled: true },
+                outputAudioTranscription: { enabled: true }
+
             }
         }
         this.ws.send(JSON.stringify(setupMsg))
