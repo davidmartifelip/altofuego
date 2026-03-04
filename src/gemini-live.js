@@ -5,7 +5,7 @@
  */
 
 const WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent'
-const MODEL = 'gemini-2.5-flash-preview-native-audio-dialog'
+const MODEL = 'gemini-2.0-flash-exp'
 
 const SYSTEM_INSTRUCTION = `Eres el sumiller y recepcionista virtual de Altofuego, un restaurante especializado en brasa de alta cocina. Tu tono es sofisticado pero acogedor. Ayuda a los clientes a conocer el menú y gestionar sus reservas. Hablas perfectamente castellano.`
 
@@ -99,7 +99,7 @@ export class GeminiLive {
                     speechConfig: {
                         voiceConfig: {
                             prebuiltVoiceConfig: {
-                                voiceName: 'Orus'
+                                voiceName: 'Puck'
                             }
                         }
                     }
