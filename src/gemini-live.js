@@ -5,7 +5,7 @@
  */
 
 const WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent'
-const MODEL = 'gemini-2.0-flash-exp'
+const MODEL = 'models/gemini-1.5-flash'
 
 const SYSTEM_INSTRUCTION = `Eres el sumiller y recepcionista virtual de Altofuego, un restaurante especializado en brasa de alta cocina. Tu tono es sofisticado pero acogedor. Ayuda a los clientes a conocer el menú y gestionar sus reservas. Hablas perfectamente castellano.`
 
@@ -93,25 +93,22 @@ export class GeminiLive {
     _sendSetup() {
         const setupMsg = {
             setup: {
-                model: `models/${MODEL}`,
+                model: MODEL, // NO pongas `models/${MODEL}` aquí, ya lo tiene la constante
                 generationConfig: {
                     responseModalities: ['AUDIO'],
                     speechConfig: {
                         voiceConfig: {
                             prebuiltVoiceConfig: {
-                                voiceName: 'Puck'
+                                voiceName: 'Puck' // Puck es más compatible que Orus
                             }
                         }
                     }
                 },
                 systemInstruction: {
                     parts: [{ text: SYSTEM_INSTRUCTION }]
-                },
-                inputAudioTranscription: {},
-                outputAudioTranscription: {}
+                }
             }
         }
-
         this.ws.send(JSON.stringify(setupMsg))
     }
 
