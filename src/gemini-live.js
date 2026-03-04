@@ -4,8 +4,8 @@
  * Supports both API key and OAuth2 access token auth.
  */
 
-const WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent'
-const MODEL = 'models/gemini-1.5-flash'
+const WS_BASE = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1.GenerativeService.BidiGenerateContent'
+const MODEL = 'models/gemini-1.5-flash-latest'
 
 const SYSTEM_INSTRUCTION = `Eres el sumiller y recepcionista virtual de Altofuego, un restaurante especializado en brasa de alta cocina. Tu tono es sofisticado pero acogedor. Ayuda a los clientes a conocer el menú y gestionar sus reservas. Hablas perfectamente castellano.`
 
@@ -108,8 +108,8 @@ export class GeminiLive {
                     parts: [{ text: SYSTEM_INSTRUCTION }]
                 },
                 // Activa esto para ver en la consola lo que Gemini entiende
-                inputAudioTranscription: { enabled: true },
-                outputAudioTranscription: { enabled: true }
+                inputAudioTranscription: {},
+                outputAudioTranscription: {}
 
             }
         }
