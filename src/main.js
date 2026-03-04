@@ -1,4 +1,6 @@
 import './style.css'
+import { GeminiLive } from './gemini-live.js'
+import { AudioManager } from './audio-manager.js'
 
 // ─── DOM Elements ───
 const body = document.body
@@ -7,82 +9,285 @@ const ctx = canvas.getContext('2d')
 const statusText = document.getElementById('status-text')
 const ctaButton = document.getElementById('cta-button')
 const micIcon = document.getElementById('mic-icon')
+const stopIcon = document.getElementById('stop-icon')
 const spinnerIcon = document.getElementById('spinner-icon')
 const hintText = document.getElementById('hint-text')
 const particlesContainer = document.getElementById('particles')
+const connectionStatus = document.getElementById('connection-status')
+
+// Modal elements
+const apiModal = document.getElementById('api-modal')
+const apiKeyInput = document.getElementById('api-key-input')
+const apiKeySubmit = document.getElementById('api-key-submit')
+const apiError = document.getElementById('api-error')
+
+// ─── Instances ───
+const gemini = new GeminiLive()
+const audio = new AudioManager()
 
 // ─── State Machine ───
 const STATES = {
   idle: {
     label: 'Listo para hablar',
-    hint: 'Toca para reservar tu experiencia',
+    hint: 'Toca para iniciar conversación',
     className: 'state-idle',
-    next: 'listening',
+  },
+  connecting: {
+    label: 'Conectando...',
+    hint: 'Estableciendo conexión',
+    className: 'state-processing',
   },
   listening: {
     label: 'Altofuego te escucha...',
-    hint: 'Toca para confirmar',
+    hint: 'Habla para reservar o preguntar',
     className: 'state-listening',
-    next: 'processing',
+  },
+  responding: {
+    label: 'Altofuego responde...',
+    hint: 'Habla para interrumpir',
+    className: 'state-responding',
   },
   processing: {
     label: 'Procesando reserva...',
     hint: 'Un momento, por favor',
     className: 'state-processing',
-    next: 'idle',
   },
 }
 
 let currentState = 'idle'
+let isSessionActive = false
+let micLevel = 0
+let hasProxyToken = false // Whether the server-side proxy is available
 
 function setState(newState) {
   const state = STATES[newState]
   if (!state) return
 
-  // Remove all state classes
   Object.values(STATES).forEach((s) => body.classList.remove(s.className))
-
-  // Apply new state class
   body.classList.add(state.className)
   currentState = newState
 
-  // Update text with fade
   statusText.style.opacity = '0'
   hintText.style.opacity = '0'
-
   setTimeout(() => {
     statusText.textContent = state.label
     hintText.textContent = state.hint
     statusText.style.opacity = '1'
     hintText.style.opacity = '1'
-  }, 250)
+  }, 200)
 
-  // Toggle icons
-  if (newState === 'processing') {
-    micIcon.classList.add('hidden')
-    spinnerIcon.classList.remove('hidden')
-  } else {
-    micIcon.classList.remove('hidden')
-    spinnerIcon.classList.add('hidden')
+  micIcon.classList.add('hidden')
+  stopIcon.classList.add('hidden')
+  spinnerIcon.classList.add('hidden')
+
+  switch (newState) {
+    case 'idle':
+      micIcon.classList.remove('hidden')
+      break
+    case 'connecting':
+    case 'processing':
+      spinnerIcon.classList.remove('hidden')
+      break
+    case 'listening':
+    case 'responding':
+      stopIcon.classList.remove('hidden')
+      break
   }
 }
 
-// Initialize
+// ─── API Key Management (fallback) ───
+const API_KEY_STORAGE = 'altofuego_gemini_key'
+
+function getStoredApiKey() {
+  return localStorage.getItem(API_KEY_STORAGE)
+}
+
+function storeApiKey(key) {
+  localStorage.setItem(API_KEY_STORAGE, key)
+}
+
+function showModal() {
+  apiModal.classList.remove('hidden')
+  const stored = getStoredApiKey()
+  if (stored) apiKeyInput.value = stored
+  setTimeout(() => apiKeyInput.focus(), 300)
+}
+
+function hideModal() {
+  apiModal.classList.add('hidden')
+}
+
+function showApiError(msg) {
+  apiError.textContent = msg
+  apiError.classList.remove('hidden')
+}
+
+function hideApiError() {
+  apiError.classList.add('hidden')
+}
+
+// ─── Connection Flow ───
+function wireGeminiCallbacks() {
+  gemini.onSetupComplete = () => {
+    console.log('[App] Gemini session ready')
+    connectionStatus.style.opacity = '1'
+  }
+
+  gemini.onAudio = (base64) => {
+    if (currentState === 'listening') {
+      setState('responding')
+    }
+    audio.playAudio(base64)
+  }
+
+  gemini.onInterrupted = () => {
+    console.log('[App] Barge-in: stopping playback')
+    audio.stopPlayback()
+    setState('listening')
+  }
+
+  gemini.onTurnComplete = () => {
+    if (isSessionActive) {
+      setState('listening')
+    }
+  }
+
+  gemini.onError = (msg) => {
+    console.error('[App] Gemini error:', msg)
+    endSession()
+    if (!hasProxyToken) {
+      showApiError(msg)
+      showModal()
+    }
+  }
+
+  gemini.onClose = () => {
+    console.log('[App] Gemini connection closed')
+    connectionStatus.style.opacity = '0'
+    if (isSessionActive) {
+      endSession()
+    }
+  }
+}
+
+async function startSession(auth) {
+  setState('connecting')
+  hideApiError()
+
+  try {
+    wireGeminiCallbacks()
+
+    if (auth.auto) {
+      await gemini.autoConnect()
+    } else {
+      await gemini.connect(auth)
+    }
+
+    hideModal()
+
+    // Start mic
+    audio.onAudioData = (base64Pcm) => {
+      gemini.sendAudio(base64Pcm)
+    }
+    audio.onMicLevel = (level) => {
+      micLevel = level
+    }
+
+    await audio.startMic()
+    isSessionActive = true
+    setState('listening')
+
+  } catch (err) {
+    console.error('[App] Connection failed:', err)
+    setState('idle')
+
+    if (auth.auto) {
+      // Proxy failed — fall back to manual API key
+      console.log('[App] Proxy auth failed, falling back to API key modal')
+      hasProxyToken = false
+      showApiError('Conexión automática fallida. Introduce una API Key.')
+      showModal()
+    } else {
+      showApiError('No se pudo conectar. Verifica tu API Key.')
+      showModal()
+    }
+  }
+}
+
+function endSession() {
+  isSessionActive = false
+  audio.disconnect()
+  gemini.disconnect()
+  connectionStatus.style.opacity = '0'
+  micLevel = 0
+  setState('idle')
+}
+
+// ─── Check if proxy is available ───
+async function checkProxy() {
+  try {
+    const res = await fetch('/api/token', { method: 'GET' })
+    if (res.ok) {
+      hasProxyToken = true
+      console.log('[App] Token proxy available — auto-auth enabled')
+    }
+  } catch {
+    hasProxyToken = false
+    console.log('[App] Token proxy not available — manual API key required')
+  }
+}
+
+// ─── Event Handlers ───
+
+// Modal submit
+apiKeySubmit.addEventListener('click', () => {
+  const key = apiKeyInput.value.trim()
+  if (!key) {
+    showApiError('Introduce una API Key válida')
+    return
+  }
+  storeApiKey(key)
+  startSession({ apiKey: key })
+})
+
+apiKeyInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') apiKeySubmit.click()
+})
+
+// CTA Button
+ctaButton.addEventListener('click', () => {
+  if (currentState === 'idle') {
+    if (hasProxyToken) {
+      startSession({ auto: true })
+    } else {
+      const key = getStoredApiKey()
+      if (key) {
+        startSession({ apiKey: key })
+      } else {
+        showModal()
+      }
+    }
+  } else if (isSessionActive) {
+    endSession()
+  }
+})
+
+// ─── Initialize ───
 setState('idle')
 
-// Button click cycles states
-ctaButton.addEventListener('click', () => {
-  const next = STATES[currentState].next
-  setState(next)
-
-  // Auto-return from processing after 3s
-  if (next === 'processing') {
-    setTimeout(() => setState('idle'), 3000)
+// Check proxy availability, then decide UI
+checkProxy().then(() => {
+  if (hasProxyToken) {
+    // Proxy available — hide modal, ready to go
+    hideModal()
+  } else if (!getStoredApiKey()) {
+    showModal()
+  } else {
+    hideModal()
   }
 })
 
 // ─── Canvas: Flame Wave Visualizer ───
-let animationId
 let time = 0
 
 function resizeCanvas() {
@@ -96,7 +301,6 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas)
 resizeCanvas()
 
-// Simplex-like noise approximation using layered sines
 function flameNoise(x, t) {
   return (
     Math.sin(x * 0.02 + t * 0.8) * 0.5 +
@@ -112,22 +316,28 @@ function drawFlameWaves() {
 
   ctx.clearRect(0, 0, w, h)
 
-  // State-dependent parameters
   let amplitude, speed, barCount, baseAlpha
   switch (currentState) {
     case 'listening':
-      amplitude = h * 0.38
-      speed = 1.8
+      amplitude = h * (0.2 + micLevel * 2.5)
+      speed = 1.5 + micLevel * 3
       barCount = 64
-      baseAlpha = 0.85
+      baseAlpha = 0.6 + micLevel * 0.4
+      break
+    case 'responding':
+      amplitude = h * 0.35
+      speed = 1.6
+      barCount = 64
+      baseAlpha = 0.75
       break
     case 'processing':
+    case 'connecting':
       amplitude = h * 0.15
       speed = 0.4
       barCount = 40
       baseAlpha = 0.3
       break
-    default: // idle
+    default:
       amplitude = h * 0.22
       speed = 0.7
       barCount = 48
@@ -141,34 +351,27 @@ function drawFlameWaves() {
 
   for (let i = 0; i < barCount; i++) {
     const x = i * barWidth
-    const normalizedX = (i / barCount) * 2 - 1 // -1 to 1
-    const edgeFade = 1 - Math.pow(Math.abs(normalizedX), 2.5) // Smooth falloff at edges
+    const normalizedX = (i / barCount) * 2 - 1
+    const edgeFade = 1 - Math.pow(Math.abs(normalizedX), 2.5)
 
     const noise = flameNoise(i * 4, time)
     const barHeight = Math.abs(noise) * amplitude * edgeFade
 
-    // Gradient based on height
     const intensity = barHeight / (amplitude * 0.8)
     const r = Math.floor(232 + (255 - 232) * intensity)
     const g = Math.floor(89 + (179 - 89) * intensity * 0.6)
     const b = Math.floor(12 + (71 - 12) * intensity * 0.3)
     const alpha = baseAlpha * edgeFade * (0.5 + intensity * 0.5)
 
-    // Draw bar
     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
-
     const gap = 2
     const roundedWidth = barWidth - gap
-
-    // Top half
     roundRect(ctx, x + gap / 2, centerY - barHeight, roundedWidth, barHeight, 2)
 
-    // Bottom half (mirror, dimmer)
     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.4})`
     roundRect(ctx, x + gap / 2, centerY, roundedWidth, barHeight * 0.6, 2)
   }
 
-  // Glow line at center
   const gradient = ctx.createLinearGradient(0, centerY - 1, 0, centerY + 1)
   gradient.addColorStop(0, `rgba(232, 89, 12, ${baseAlpha * 0.15})`)
   gradient.addColorStop(0.5, `rgba(255, 179, 71, ${baseAlpha * 0.08})`)
@@ -176,7 +379,7 @@ function drawFlameWaves() {
   ctx.fillStyle = gradient
   ctx.fillRect(0, centerY - 0.5, w, 1)
 
-  animationId = requestAnimationFrame(drawFlameWaves)
+  requestAnimationFrame(drawFlameWaves)
 }
 
 function roundRect(ctx, x, y, width, height, radius) {
@@ -201,36 +404,23 @@ drawFlameWaves()
 function createParticle() {
   const particle = document.createElement('div')
   particle.classList.add('particle')
-
   const size = Math.random() * 3 + 1
   particle.style.width = `${size}px`
   particle.style.height = `${size}px`
   particle.style.left = `${Math.random() * 100}%`
   particle.style.bottom = '-10px'
   particle.style.setProperty('--drift', `${(Math.random() - 0.5) * 80}px`)
-
   const duration = Math.random() * 8 + 6
   particle.style.animationDuration = `${duration}s`
   particle.style.animationDelay = `${Math.random() * 2}s`
-
   particlesContainer.appendChild(particle)
-
-  setTimeout(() => {
-    particle.remove()
-  }, (duration + 2) * 1000)
+  setTimeout(() => particle.remove(), (duration + 2) * 1000)
 }
 
-// Spawn particles periodically
 function spawnParticles() {
-  const count = currentState === 'listening' ? 3 : 1
-  for (let i = 0; i < count; i++) {
-    createParticle()
-  }
+  const count = currentState === 'listening' || currentState === 'responding' ? 3 : 1
+  for (let i = 0; i < count; i++) createParticle()
 }
 
 setInterval(spawnParticles, 800)
-
-// Initial batch
-for (let i = 0; i < 8; i++) {
-  setTimeout(createParticle, i * 200)
-}
+for (let i = 0; i < 8; i++) setTimeout(createParticle, i * 200)

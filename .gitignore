@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Service account credentials
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
