@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/* ── Design Tokens ── */
+@theme {
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --color-charcoal: #0D0D0D;
+  --color-charcoal-light: #1A1A1A;
+  --color-fire: #E8590C;
+  --color-fire-light: #FFB347;
+  --color-ember: #C2410C;
+  --color-smoke: #A3A3A3;
+  --color-ash: #525252;
+}
+
+/* ── Base ── */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: radial-gradient(ellipse at 50% 0%, #1a1008 0%, #0A0A0A 50%);
+}
+
+/* ── Logo Flame Animation ── */
+#logo-flame {
+  animation: flame-dance 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(232, 89, 12, 0.3));
+}
+
+@keyframes flame-dance {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+    filter: drop-shadow(0 0 20px rgba(232, 89, 12, 0.3));
+  }
+  25% {
+    transform: scaleY(1.03) scaleX(0.98);
+    filter: drop-shadow(0 0 25px rgba(232, 89, 12, 0.4));
+  }
+  50% {
+    transform: scaleY(0.97) scaleX(1.02);
+    filter: drop-shadow(0 0 18px rgba(232, 89, 12, 0.25));
+  }
+  75% {
+    transform: scaleY(1.02) scaleX(0.99);
+    filter: drop-shadow(0 0 22px rgba(232, 89, 12, 0.35));
+  }
+}
+
+/* ── Pulse Ring Animation ── */
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.state-listening #pulse-ring {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+.state-processing #pulse-ring {
+  animation: pulse-glow 2s ease-in-out infinite;
+  background: rgba(232, 89, 12, 0.1);
+}
+
+/* ── State Transitions ── */
+.state-idle #status-text {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.state-listening #status-text {
+  color: var(--color-fire-light);
+  animation: text-breathe 2s ease-in-out infinite;
+}
+
+.state-processing #status-text {
+  color: var(--color-smoke);
+}
+
+@keyframes text-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── Listening state: logo glows brighter ── */
+.state-listening #logo-flame {
+  filter: drop-shadow(0 0 35px rgba(232, 89, 12, 0.6));
+  animation: flame-dance 1.5s ease-in-out infinite;
+}
+
+.state-listening #logo-container {
+  transform: scale(1.05);
+}
+
+/* ── Processing state: subdued ── */
+.state-processing #logo-flame {
+  filter: drop-shadow(0 0 12px rgba(232, 89, 12, 0.15));
+  animation: flame-dance 4s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.state-processing #logo-container {
+  transform: scale(0.97);
+}
+
+/* ── Canvas ── */
+#flame-visualizer {
+  background: rgba(13, 13, 13, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 89, 12, 0.08);
+}
+
+.state-listening #flame-visualizer {
+  border-color: rgba(232, 89, 12, 0.2);
+  box-shadow: 0 0 30px rgba(232, 89, 12, 0.08);
+}
+
+/* ── Ambient Particles ── */
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle, rgba(232, 89, 12, 0.6), transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float-up linear infinite;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(var(--drift, 20px)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ── Smooth global transitions ── */
+#logo-container,
+#status-text,
+#hint-text,
+#tagline,
+#flame-visualizer {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Altofuego — Experiencia gastronómica de lujo. Reserva tu mesa con nuestro asistente virtual." />
+    <meta name="theme-color" content="#0D0D0D" />
+    <title>Altofuego — Restaurante de Lujo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  </head>
+  <body class="bg-[#0A0A0A] text-white min-h-screen overflow-hidden select-none">
+
+    <!-- Ambient particle overlay -->
+    <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Main container -->
+    <main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
+
+      <!-- Top tagline -->
+      <p id="tagline" class="font-sans text-xs tracking-[0.35em] uppercase text-white/30 mb-8 transition-opacity duration-700">
+        Experiencia Gastronómica
+      </p>
+
+      <!-- Logo -->
+      <div id="logo-container" class="flex flex-col items-center mb-10 transition-all duration-700">
+        <svg id="logo-flame" viewBox="0 0 60 80" class="w-14 h-auto mb-4 drop-shadow-[0_0_20px_rgba(232,89,12,0.3)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 0C30 0 10 25 10 45C10 60 18 72 30 78C42 72 50 60 50 45C50 25 30 0 30 0Z" fill="url(#flame-gradient)" />
+          <path d="M30 20C30 20 20 35 20 48C20 58 24 65 30 68C36 65 40 58 40 48C40 35 30 20 30 20Z" fill="url(#flame-inner)" opacity="0.8" />
+          <defs>
+            <linearGradient id="flame-gradient" x1="30" y1="0" x2="30" y2="78" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#FFB347" />
+              <stop offset="0.5" stop-color="#E8590C" />
+              <stop offset="1" stop-color="#7C2D12" />
+            </linearGradient>
+            <linearGradient id="flame-inner" x1="30" y1="20" x2="30" y2="68" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#FDE68A" />
+              <stop offset="0.6" stop-color="#FFB347" />
+              <stop offset="1" stop-color="#E8590C" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1 class="font-serif text-4xl md:text-5xl font-semibold tracking-wide text-white">
+          Alto<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FFB347] to-[#E8590C]">fuego</span>
+        </h1>
+      </div>
+
+      <!-- Canvas wave visualizer -->
+      <div id="canvas-wrapper" class="relative w-full max-w-lg mb-10">
+        <canvas id="flame-visualizer" class="w-full h-28 md:h-36 rounded-2xl"></canvas>
+        <!-- Canvas glow backdrop -->
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#E8590C]/5 to-transparent pointer-events-none"></div>
+      </div>
+
+      <!-- Status text -->
+      <p id="status-text" class="font-sans text-sm md:text-base text-white/50 mb-8 h-6 transition-all duration-500 tracking-wide">
+        Listo para hablar
+      </p>
+
+      <!-- CTA Button -->
+      <button id="cta-button" class="group relative cursor-pointer" aria-label="Activar asistente de voz">
+        <!-- Pulse ring -->
+        <span id="pulse-ring" class="absolute inset-0 rounded-full bg-[#E8590C]/20 scale-100 transition-transform duration-700"></span>
+        <!-- Button body -->
+        <span class="relative flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#E8590C] to-[#C2410C] shadow-[0_0_40px_rgba(232,89,12,0.3)] transition-all duration-300 group-hover:shadow-[0_0_60px_rgba(232,89,12,0.5)] group-hover:scale-105 group-active:scale-95">
+          <!-- Mic icon -->
+          <svg id="mic-icon" class="w-8 h-8 md:w-10 md:h-10 text-white transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="22" />
+          </svg>
+          <!-- Processing spinner (hidden by default) -->
+          <svg id="spinner-icon" class="hidden w-8 h-8 md:w-10 md:h-10 text-white animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25" />
+            <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1" />
+          </svg>
+        </span>
+      </button>
+
+      <!-- Bottom hint -->
+      <p id="hint-text" class="font-sans text-[11px] text-white/20 mt-8 tracking-wider transition-opacity duration-500">
+        Toca para reservar tu experiencia
+      </p>
+
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
