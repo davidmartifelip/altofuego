@@ -1,6 +1,7 @@
 import './style.css'
 import { GeminiLive } from './gemini-live.js'
 import { AudioManager } from './audio-manager.js'
+import { executeConsultarDisponibilidad, executeCrearReserva } from './reservations.js'
 
 // ─── DOM Elements ───
 const body = document.body
@@ -150,6 +151,31 @@ function wireGeminiCallbacks() {
     if (isSessionActive) {
       setState('listening')
     }
+  }
+
+  gemini.onToolCall = async ({ id, name, args }) => {
+    console.log('[App] Tool call:', name, args)
+    setState('processing')
+
+    let result
+    try {
+      if (name === 'consultar_disponibilidad') {
+        result = await executeConsultarDisponibilidad(args)
+      } else if (name === 'crear_reserva') {
+        result = await executeCrearReserva(args)
+      } else {
+        result = { error: `Función desconocida: ${name}` }
+      }
+    } catch (err) {
+      console.error('[App] Tool execution error:', err)
+      result = { error: 'Error interno al ejecutar la función.' }
+    }
+
+    // Send result back to Gemini
+    gemini.sendToolResponse(id, name, result)
+
+    // Return to listening state (Gemini will speak the response)
+    if (isSessionActive) setState('listening')
   }
 
   gemini.onError = (msg) => {

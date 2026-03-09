@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { geminiTokenPlugin } from './server/token-plugin.js'
+import { webhooksPlugin } from './server/webhooks-plugin.js'
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -9,6 +10,7 @@ export default {
   plugins: [
     tailwindcss(),
     geminiTokenPlugin(),
+    webhooksPlugin(),
   ],
   build: {
     rollupOptions: {

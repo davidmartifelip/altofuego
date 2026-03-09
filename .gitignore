@@ -28,3 +28,9 @@ dist-ssr
 !package.json
 !package-lock.json
 !tsconfig.json
+
+# Environment variables (n8n webhook URLs)
+.env
+.env.*
+!.env.example
+
