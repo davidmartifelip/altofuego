@@ -1,0 +1,32 @@
+categoria,orden_categoria,nombre,descripcion,precio,etiquetas,disponible
+Para Empezar,1,Croquetas de tuétano a la brasa,Croqueta cremosa de tuétano de buey con costra ahumada y polvo de carbón,14,signature,true
+Para Empezar,1,Steak tartare de buey madurado,Buey madurado 60 días cortado a cuchillo con yema curada y mostaza antigua,22,sin_gluten signature,true
+Para Empezar,1,Navajas a la brasa,Navajas de la costa con mantequilla de hierbas y limón ahumado,18,sin_gluten mar,true
+Para Empezar,1,Foie a las brasas,Foie fresco marcado en parrilla con manzana caramelizada y brioche de espelta,26,temporada,true
+Para Empezar,1,Ceviche de lubina,Lubina salvaje con leche de tigre de ají amarillo y maíz tostado,19,sin_gluten mar,true
+Para Empezar,1,Pan de masa madre con mantequilla de huesos,Hogaza horneada en brasa con mantequilla de tuétano ahumada,8,,true
+Del Mar,2,Rodaballo entero a la brasa,Rodaballo salvaje del Cantábrico con aceite de oliva virgen y flor de sal,58,sin_gluten mar temporada,true
+Del Mar,2,Pulpo de roca a la brasa,Pulpo gallego con parmentier de pimentón de la Vera y aceite de brasa,34,sin_gluten mar,true
+Del Mar,2,Gamba roja de Palamós,A la parrilla con sal Maldon y limón en rama. Precio por unidad,12,sin_gluten mar signature,true
+Del Mar,2,Kokotxas de bacalao al pil pil,Kokotxas confitadas con pil pil de ajo negro y guindilla fresca,29,sin_gluten,true
+Del Mar,2,Lubina salvaje a la sal,Lubina entera cocinada en costra de sal y hierbas mediterráneas — para 2 personas,62,sin_gluten mar temporada,true
+De la Tierra,3,Chuletón de buey madurado (1kg),Buey raza Rubia Gallega madurado 45 días. Brasa de encina. Para 2 personas,110,sin_gluten signature,true
+De la Tierra,3,Entrecot de vaca madurada,Vaca vieja 30 días con chimichurri de hierbas y patatas al rescoldo,54,sin_gluten,true
+De la Tierra,3,Costilla de cerdo ibérico 18h,Costilla ibérica cocinada 18 horas en brasa lenta con glaseado de miel y jengibre,38,sin_gluten,true
+De la Tierra,3,Secreto ibérico bellota,Secreto de cerdo ibérico de bellota con parmentier al carbón y salsa romesco,36,sin_gluten,true
+De la Tierra,3,Pollo de corral a la brasa,Pollo de corral español con piel crujiente y mojo verde de cilantro,32,sin_gluten,true
+Verduras y Guarniciones,4,Alcachofas a la brasa,Alcachofas de temporada con alioli de trufa y parmesano curado,16,vegetariano temporada,true
+Verduras y Guarniciones,4,Pimientos del Padrón,A la llama con sal de escamas y aceite de oliva virgen extra,9,sin_gluten vegetariano,true
+Verduras y Guarniciones,4,Patatas al rescoldo,Patatas asadas entre las brasas con crema ácida y cebollino,10,sin_gluten vegetariano,true
+Verduras y Guarniciones,4,Espárragos blancos con romesco,Espárragos de Navarra a la parrilla con salsa romesco artesana,14,sin_gluten vegetariano temporada,true
+Verduras y Guarniciones,4,Provolone a la brasa,Queso provolone fundido en sartén de hierro con oregano y guindilla,12,vegetariano,true
+Postres,5,Coulant de chocolate negro,Chocolate 72% con corazón líquido y helado de vainilla de Madagascar,12,signature,true
+Postres,5,Piña a la brasa con ron,Piña caramelizada en parrilla con helado de coco y caramelo de ron añejo,10,sin_gluten vegetariano,true
+Postres,5,Crema catalana de azahar,Crema catalana perfumada con azahar y quemada al momento con soplete,9,vegetariano,true
+Postres,5,Tabla de quesos artesanos,Selección de 5 quesos con membrillo casero y nueces garrapiñadas,18,,true
+Bebidas,6,Agua mineral (750ml),,4,,true
+Bebidas,6,Refrescos,,4,,true
+Bebidas,6,Cerveza artesanal de barril,,6,,true
+Bebidas,6,Copa de vino de la casa,,7,,true
+Bebidas,6,Botella de vino de autor (selección del sumiller),,45,signature,true
+Bebidas,6,Cóctel de bienvenida Altofuego,Vermut rojo con naranja flameada y oliva ahumada,9,signature,true
