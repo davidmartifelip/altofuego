@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description"
+        content="Altofuego — Conoce a nuestro equipo. Los artesanos del fuego y la hospitalidad." />
+    <meta name="theme-color" content="#0D0D0D" />
+    <title>Nosotros — Altofuego Restaurante de Brasa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ─── Design Tokens ─── */
+        :root {
+            --fire: #E8590C;
+            --fire-light: #FFB347;
+            --ember: #C2410C;
+            --bg: #0A0A0A;
+            --bg-card: #141414;
+            --bg-card-hover: #1a1a1a;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-fire: rgba(232, 89, 12, 0.15);
+            --text: #F5F5F5;
+            --text-muted: rgba(255, 255, 255, 0.45);
+            --text-subtle: rgba(255, 255, 255, 0.25);
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --radius: 20px;
+            --max-w: 1100px;
+        }
+
+        /* ─── Reset & Base ─── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            background-image: radial-gradient(ellipse at 50% 0%, #1a1008 0%, var(--bg) 60%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── Top Nav (Consistent) ─── */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            height: 60px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.02em;
+        }
+
+        .nav-logo-text span {
+            color: var(--fire-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 7px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-light);
+            background: rgba(232, 89, 12, 0.1);
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+            text-align: center;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--fire);
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--fire-light);
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        /* ─── Team Grid ─── */
+        .team-section {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px 100px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        /* ─── Team Card ─── */
+        .team-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-fire);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--fire), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .team-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .avatar-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(232, 89, 12, 0.1), rgba(232, 89, 12, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(232, 89, 12, 0.1);
+        }
+
+        .avatar-icon {
+            font-size: 32px;
+            filter: grayscale(1) brightness(1.5);
+            transition: all 0.3s;
+        }
+
+        .team-card:hover .avatar-icon {
+            filter: grayscale(0) brightness(1);
+            transform: scale(1.1);
+        }
+
+        .member-role {
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--fire);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .member-name {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .member-quote {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-style: italic;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .member-quote::before,
+        .member-quote::after {
+            content: '"';
+            color: var(--fire);
+            font-family: var(--font-serif);
+            font-size: 20px;
+            opacity: 0.3;
+        }
+
+        /* ─── Layout Highlights ─── */
+        .feature-card {
+            grid-column: span 2;
+            display: flex;
+            text-align: left;
+            align-items: center;
+            gap: 32px;
+            padding: 48px;
+            background: linear-gradient(135deg, #141414, #1a1008);
+        }
+
+        @media (max-width: 768px) {
+            .feature-card {
+                grid-column: span 1;
+                flex-direction: column;
+                text-align: center;
+                padding: 32px 24px;
+            }
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px 60px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-subtle);
+            letter-spacing: 0.02em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="top-nav">
+        <a href="/" class="nav-logo">
+            <svg viewBox="0 0 40 54" width="22" fill="none">
+                <path d="M20 0C20 0 6 17 6 30C6 40 12 48 20 52C28 48 34 40 34 30C34 17 20 0 20 0Z" fill="url(#ng)" />
+                <defs>
+                    <linearGradient id="ng" x1="20" y1="0" x2="20" y2="52">
+                        <stop offset="0" stop-color="#FFB347" />
+                        <stop offset="1" stop-color="#7C2D12" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="nav-logo-text">Alto<span>fuego</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Asistente</a></li>
+            <li><a href="/menu.html">Carta</a></li>
+            <li><a href="/nosotros.html" class="active">Nosotros</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <p class="hero-eyebrow">El Alma de Altofuego</p>
+        <h1 class="hero-title">Los artesanos del <em>Humo</em></h1>
+        <p class="hero-subtitle">
+            Un equipo unido por la obsesión por el producto y el respeto ancestral al fuego.
+        </p>
+    </header>
+
+    <main class="team-section">
+        <div class="team-grid">
+
+            <!-- Jefe de Cocina -->
+            <div class="team-card feature-card">
+                <div class="avatar-container" style="width: 120px; height: 120px;">
+                    <span class="avatar-icon" style="font-size: 48px;">👨‍🍳</span>
+                </div>
+                <div>
+                    <p class="member-role">Chef Ejecutivo</p>
+                    <h2 class="member-name">Ricardo "Brasa" Mendoza</h2>
+                    <p class="member-quote">No cocino con fuego, dirijo una orquesta de brasas donde el solista siempre
+                        es el producto.</p>
+                </div>
+            </div>
+
+            <!-- Jefa de Sala -->
+            <div class="team-card feature-card">
+                <div class="avatar-container" style="width: 120px; height: 120px;">
+                    <span class="avatar-icon" style="font-size: 48px;">👩‍💼</span>
+                </div>
+                <div>
+                    <p class="member-role">Directora de Sala</p>
+                    <h2 class="member-name">Elena Valiente</h2>
+                    <p class="member-quote">Mi misión es que te sientas en casa, pero con un servicio tan preciso que
+                        parezca magia.</p>
+                </div>
+            </div>
+
+            <!-- Cocinera -->
+            <div class="team-card">
+                <div class="avatar-container">
+                    <span class="avatar-icon">👩‍🍳</span>
+                </div>
+                <p class="member-role">Jefa de Partida</p>
+                <h2 class="member-name">Lucía Humo</h2>
+                <p class="member-quote">El secreto no es la temperatura, es saber escuchar cuando la carne deja de
+                    cantar.</p>
+            </div>
+
+            <!-- Cocinero -->
+            <div class="team-card">
+                <div class="avatar-container">
+                    <span class="avatar-icon">👨‍🍳</span>
+                </div>
+                <p class="member-role">Garrillero</p>
+                <h2 class="member-name">Marco Carbón</h2>
+                <p class="member-quote">Hablo mejor con el quebracho que con las personas. Las brasas nunca mienten.</p>
+            </div>
+
+            <!-- Camarero 1 -->
+            <div class="team-card">
+                <div class="avatar-container">
+                    <span class="avatar-icon">🤵</span>
+                </div>
+                <p class="member-role">Sommelier</p>
+                <h2 class="member-name">Jordi Copas</h2>
+                <p class="member-quote">Soy como un ninja: apareceré justo cuando tu copa necesite alma, y desapareceré
+                    sin que me veas.</p>
+            </div>
+
+            <!-- Camarera 2 -->
+            <div class="team-card">
+                <div class="avatar-container">
+                    <span class="avatar-icon">👩‍💼</span>
+                </div>
+                <p class="member-role">Capitana de Rango</p>
+                <h2 class="member-name">Sara Detalle</h2>
+                <p class="member-quote">Si noto que tu silla está un milímetro torcida, no podré dormir por la noche.
+                </p>
+            </div>
+
+            <!-- Camarero 3 -->
+            <div class="team-card">
+                <div class="avatar-container">
+                    <span class="avatar-icon">👨‍💼</span>
+                </div>
+                <p class="member-role">Maitre</p>
+                <h2 class="member-name">Pablo Historias</h2>
+                <p class="member-quote">No sirvo platos, relato el viaje de una materia prima desde la tierra hasta tu
+                    paladar.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">
+            <strong>Altofuego</strong> · Brasa de Alta Cocina<br>
+            C/ de la Llama, 12 · Barcelona
+        </p>
+    </footer>
+
+</body>
+
+</html>

@@ -18,16 +18,88 @@
 <body class="bg-[#0A0A0A] text-white min-h-screen overflow-hidden select-none">
 
   <!-- Top navigation -->
-  <nav
-    class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 h-[52px] bg-black/70 backdrop-blur-xl border-b border-white/[0.04]"
-    role="navigation" aria-label="Navegación principal">
-    <span class="font-serif text-base font-semibold tracking-wide text-white/80">
-      Alto<span class="text-[#FFB347]">fuego</span>
-    </span>
-    <a href="/menu.html"
-      class="text-[11px] font-medium tracking-[0.12em] uppercase text-white/40 hover:text-[#FFB347] transition-colors duration-200 px-3 py-1.5 rounded-lg hover:bg-white/[0.04]">
-      Carta
+  <style>
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 60px;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #F5F5F5;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-logo-text span {
+      color: #FFB347;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.45);
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links a:hover {
+      color: #F5F5F5;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links a.active {
+      color: #FFB347;
+      background: rgba(232, 89, 12, 0.1);
+    }
+  </style>
+  <nav class="top-nav" role="navigation" aria-label="Navegación principal">
+    <a href="/" class="nav-logo" aria-label="Altofuego — Inicio">
+      <svg viewBox="0 0 40 54" width="22" fill="none">
+        <path d="M20 0C20 0 6 17 6 30C6 40 12 48 20 52C28 48 34 40 34 30C34 17 20 0 20 0Z" fill="url(#ng-idx)" />
+        <defs>
+          <linearGradient id="ng-idx" x1="20" y1="0" x2="20" y2="52" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FFB347" />
+            <stop offset="1" stop-color="#7C2D12" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="nav-logo-text">Alto<span>fuego</span></span>
     </a>
+    <ul class="nav-links">
+      <li><a href="/" class="active">Asistente</a></li>
+      <li><a href="/menu.html">Carta</a></li>
+      <li><a href="/nosotros.html">Nosotros</a></li>
+    </ul>
   </nav>
 
   <!-- API Key Modal -->
