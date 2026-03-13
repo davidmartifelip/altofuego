@@ -17,6 +17,7 @@ export default {
       input: {
         main: resolve(__dirname, 'index.html'),
         menu: resolve(__dirname, 'menu.html'),
+        nosotros: resolve(__dirname, 'nosotros.html'),
       }
     }
   }
