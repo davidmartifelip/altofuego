@@ -228,7 +228,7 @@
         /* ─── Category Section ─── */
         .menu-section {
             margin-bottom: 64px;
-            scroll-margin-top: 130px;
+            scroll-margin-top: 160px;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
@@ -550,12 +550,12 @@
             if (nav.children.length) return // already populated
 
             sections.forEach(section => {
-                const h2 = section.querySelector('h2')
-                if (!h2) return
                 const a = document.createElement('a')
-                a.href = `#${h2.id}`
+                a.href = `#${section.id}`
                 a.className = 'cat-nav-link'
-                a.textContent = h2.textContent
+                // Use the text from the h2 title
+                const h2 = section.querySelector('h2')
+                a.textContent = h2 ? h2.textContent : 'Categoría'
                 nav.appendChild(a)
             })
         })
