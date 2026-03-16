@@ -132,6 +132,22 @@ body {
   transition: opacity 0.2s ease;
 }
 
+.status-capsule {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 20;
+}
+
+.state-listening .status-capsule {
+  border-color: rgba(232, 89, 12, 0.15);
+  background: rgba(232, 89, 12, 0.05);
+}
+
+.state-responding .status-capsule {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(13, 13, 13, 0.9);
+}
+
 @keyframes text-breathe {
 
   0%,

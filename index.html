@@ -185,11 +185,17 @@
       </div>
     </div>
 
-    <!-- Status text -->
-    <p id="status-text"
-      class="font-sans text-sm md:text-base text-white/50 mb-4 md:mb-8 min-h-[1.5em] transition-all duration-500 tracking-wide text-center">
-      Listo para hablar
-    </p>
+    <!-- Status Capsule -->
+    <div
+      class="status-capsule flex flex-col items-center justify-center w-full max-w-sm mx-auto mb-6 md:mb-10 min-h-[100px] px-6 py-4 rounded-[32px] border border-white/5 bg-[#0D0D0D]/80 backdrop-blur-xl transition-all duration-500">
+      <p id="status-text"
+        class="font-sans text-sm md:text-base text-white/50 min-h-[1.5em] transition-all duration-500 tracking-wide text-center">
+        Listo para hablar
+      </p>
+      <p id="hint-text" class="font-sans text-[11px] text-white/20 mt-2 tracking-wider transition-opacity duration-500">
+        Toca para reservar tu experiencia
+      </p>
+    </div>
 
     <!-- CTA Button -->
     <button id="cta-button" class="group relative cursor-pointer" aria-label="Activar asistente de voz">
@@ -217,10 +223,6 @@
       </span>
     </button>
 
-    <!-- Bottom hint -->
-    <p id="hint-text" class="font-sans text-[11px] text-white/20 mt-8 tracking-wider transition-opacity duration-500">
-      Toca para reservar tu experiencia
-    </p>
 
   </main>
 
