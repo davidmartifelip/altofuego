@@ -73,10 +73,15 @@ function setState(newState) {
 
   // Wait for the fade out (match CSS transition)
   stateTimeoutId = setTimeout(() => {
+    // Update visual state classes on body to match the new text
+    Object.values(STATES).forEach((s) => body.classList.remove(s.className))
+    body.classList.add(state.className)
+    currentState = newState
+
     statusText.textContent = state.label
     hintText.textContent = state.hint
 
-    // Tiny delay to ensure text is swapped before fading back in
+    // Tiny delay to ensure text and styles are swapped before fading back in
     requestAnimationFrame(() => {
       statusText.classList.remove('is-changing')
       hintText.classList.remove('is-changing')
