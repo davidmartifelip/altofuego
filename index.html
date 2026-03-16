@@ -136,11 +136,11 @@
   <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
 
   <!-- Main container -->
-  <main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
+  <main class="relative z-10 flex flex-col items-center justify-end md:justify-center min-h-screen px-6 pb-12 md:pb-0">
 
     <!-- Connection status dot -->
     <div id="connection-status"
-      class="absolute top-6 right-6 flex items-center gap-2 opacity-0 transition-opacity duration-500">
+      class="absolute top-20 md:top-6 right-6 flex items-center gap-2 opacity-0 transition-opacity duration-500">
       <span id="status-dot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
       <span class="font-sans text-[11px] text-white/30 tracking-wider">CONECTADO</span>
     </div>
@@ -152,9 +152,10 @@
     </p>
 
     <!-- Logo -->
-    <div id="logo-container" class="flex flex-col items-center mb-10 transition-all duration-700">
-      <svg id="logo-flame" viewBox="0 0 60 80" class="w-14 h-auto mb-4 drop-shadow-[0_0_20px_rgba(232,89,12,0.3)]"
-        fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div id="logo-container" class="flex flex-col items-center mb-6 md:mb-10 transition-all duration-700">
+      <svg id="logo-flame" viewBox="0 0 60 80"
+        class="w-12 md:w-14 h-auto mb-4 drop-shadow-[0_0_20px_rgba(232,89,12,0.3)]" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
         <path d="M30 0C30 0 10 25 10 45C10 60 18 72 30 78C42 72 50 60 50 45C50 25 30 0 30 0Z"
           fill="url(#flame-gradient)" />
         <path d="M30 20C30 20 20 35 20 48C20 58 24 65 30 68C36 65 40 58 40 48C40 35 30 20 30 20Z"
@@ -178,15 +179,15 @@
     </div>
 
     <!-- Canvas wave visualizer -->
-    <div id="canvas-wrapper" class="relative w-full max-w-lg mb-10">
-      <canvas id="flame-visualizer" class="w-full h-28 md:h-36 rounded-2xl"></canvas>
+    <div id="canvas-wrapper" class="relative w-full max-w-lg mb-6 md:mb-10">
+      <canvas id="flame-visualizer" class="w-full h-24 md:h-36 rounded-2xl"></canvas>
       <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#E8590C]/5 to-transparent pointer-events-none">
       </div>
     </div>
 
     <!-- Status text -->
     <p id="status-text"
-      class="font-sans text-sm md:text-base text-white/50 mb-8 h-6 transition-all duration-500 tracking-wide">
+      class="font-sans text-sm md:text-base text-white/50 mb-6 md:mb-8 min-h-[1.5em] transition-all duration-500 tracking-wide text-center">
       Listo para hablar
     </p>
 

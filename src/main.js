@@ -70,12 +70,14 @@ function setState(newState) {
 
   statusText.style.opacity = '0'
   hintText.style.opacity = '0'
+
+  // Wait for the fade out to almost complete before switching text
   setTimeout(() => {
     statusText.textContent = state.label
     hintText.textContent = state.hint
     statusText.style.opacity = '1'
     hintText.style.opacity = '1'
-  }, 200)
+  }, 400)
 
   micIcon.classList.add('hidden')
   stopIcon.classList.add('hidden')
