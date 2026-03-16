@@ -120,9 +120,16 @@ body {
   color: var(--color-smoke);
 }
 
-/* Prevent animation overlap during JS transitions */
-#status-text[style*="opacity: 0"] {
+#status-text,
+#hint-text {
+  transition: opacity 0.3s ease, color 0.5s ease;
+}
+
+#status-text.is-changing,
+#hint-text.is-changing {
+  opacity: 0 !important;
   animation: none !important;
+  transition: opacity 0.2s ease;
 }
 
 @keyframes text-breathe {

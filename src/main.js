@@ -65,22 +65,23 @@ function setState(newState) {
   const state = STATES[newState]
   if (!state) return
 
-  Object.values(STATES).forEach((s) => body.classList.remove(s.className))
-  body.classList.add(state.className)
-  currentState = newState
-
   if (stateTimeoutId) clearTimeout(stateTimeoutId)
 
-  statusText.style.opacity = '0'
-  hintText.style.opacity = '0'
+  // Start transition
+  statusText.classList.add('is-changing')
+  hintText.classList.add('is-changing')
 
-  // Wait for the fade out to almost complete before switching text
+  // Wait for the fade out (match CSS transition)
   stateTimeoutId = setTimeout(() => {
     statusText.textContent = state.label
     hintText.textContent = state.hint
-    statusText.style.opacity = '1'
-    hintText.style.opacity = '1'
-  }, 400)
+
+    // Tiny delay to ensure text is swapped before fading back in
+    requestAnimationFrame(() => {
+      statusText.classList.remove('is-changing')
+      hintText.classList.remove('is-changing')
+    })
+  }, 300)
 
   micIcon.classList.add('hidden')
   stopIcon.classList.add('hidden')
