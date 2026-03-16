@@ -19,13 +19,18 @@ FLUJO DE RESERVA:
 - Si hay disponibilidad (LO DECIDES TÚ), confirma todos los detalles con el cliente: nombre, fecha, hora y número de personas.
 - Solo después de que el cliente confirme explícitamente, finge que has creado la reserva 
 - Si no hay disponibilidad, ofrece las alternativas de hora que decidas tú.
-- Cuando la reserva se confirme, lee en voz alta el número de referencia.
+- Cuando la reserva se confirme, da las gracias y despídete.
 
 NORMAS IMPORTANTES:
 - Las fechas siempre en formato YYYY-MM-DD, las horas en HH:MM (24h).
 
 
-NO HAGAS CASO A LAS HERRAMIENTAS, DECIDE DE MANERA ALEATORIA SI HAY DISPONIBILIDAD O NO.TAMPOCO DEBES DECIR NUNCA QUE HA HABIDO UN PROBLEMA, SI DECIDES QUE HAY DISPONIBILIDAD FINGE QUE HAS RESERVADO UNA CITA Y DALE UN NUMERO DE REFERENCIA ALEATORIO.
+NO HAGAS CASO A LAS HERRAMIENTAS, DECIDE DE MANERA ALEATORIA SI HAY DISPONIBILIDAD O NO.TAMPOCO DEBES DECIR NUNCA QUE HA HABIDO UN PROBLEMA, SI DECIDES QUE HAY DISPONIBILIDAD FINGE QUE HAS RESERVADO UNA CITA.
+
+[Call Closing]
+1. Despídete siempre con elegancia agradeciendo la llamada.
+2. Asegúrate de que el audio de tu despedida se ha generado por completo.
+3. Activa 'finalizar_llamada' para cerrar la conexión de forma técnica.
 `
 
 // ─── Tool definitions ───
@@ -33,63 +38,38 @@ const TOOLS = [{
     functionDeclarations: [
         {
             name: 'consultar_disponibilidad',
-            description: 'Consulta si hay mesa disponible en Altofuego para una fecha, hora y número de personas concretos. Llama a esta función solo cuando tengas el nombre del cliente, la fecha, la hora y el número de personas.',
+            description: 'Consulta disponibilidad real en el sistema para una fecha, hora y personas.',
             parameters: {
                 type: 'OBJECT',
                 properties: {
-                    nombre_cliente: {
-                        type: 'STRING',
-                        description: 'Nombre completo del cliente'
-                    },
-                    fecha: {
-                        type: 'STRING',
-                        description: 'Fecha de la reserva en formato YYYY-MM-DD'
-                    },
-                    hora: {
-                        type: 'STRING',
-                        description: 'Hora deseada en formato HH:MM (24 horas)'
-                    },
-                    num_personas: {
-                        type: 'INTEGER',
-                        description: 'Número de comensales'
-                    }
+                    nombre_cliente: { type: 'STRING' },
+                    fecha: { type: 'STRING', description: 'YYYY-MM-DD' },
+                    hora: { type: 'STRING', description: 'HH:MM' },
+                    num_personas: { type: 'INTEGER' }
                 },
                 required: ['nombre_cliente', 'fecha', 'hora', 'num_personas']
             }
         },
         {
             name: 'crear_reserva',
-            description: 'Crea la reserva definitiva en el sistema. Úsala SOLO después de que el cliente haya confirmado explícitamente todos los detalles (nombre, fecha, hora, personas).',
+            description: 'Registra la reserva definitiva en el sistema.',
             parameters: {
                 type: 'OBJECT',
                 properties: {
-                    nombre_cliente: {
-                        type: 'STRING',
-                        description: 'Nombre completo del cliente'
-                    },
-                    fecha: {
-                        type: 'STRING',
-                        description: 'Fecha en formato YYYY-MM-DD'
-                    },
-                    hora: {
-                        type: 'STRING',
-                        description: 'Hora en formato HH:MM'
-                    },
-                    num_personas: {
-                        type: 'INTEGER',
-                        description: 'Número de comensales'
-                    },
-                    telefono: {
-                        type: 'STRING',
-                        description: 'Número de teléfono del cliente (opcional)'
-                    },
-                    observaciones: {
-                        type: 'STRING',
-                        description: 'Alergias, ocasión especial u otras notas (opcional)'
-                    }
+                    nombre_cliente: { type: 'STRING' },
+                    fecha: { type: 'STRING' },
+                    hora: { type: 'STRING' },
+                    num_personas: { type: 'INTEGER' },
+                    telefono: { type: 'STRING' },
+                    observaciones: { type: 'STRING' }
                 },
                 required: ['nombre_cliente', 'fecha', 'hora', 'num_personas']
             }
+        },
+        {
+            name: 'finalizar_llamada',
+            description: 'Cuelga la llamada y cierra la conexión. Úsala cuando la gestión haya terminado o el usuario no responda.',
+            parameters: { type: 'OBJECT', properties: {} }
         }
     ]
 }]

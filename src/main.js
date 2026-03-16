@@ -60,6 +60,15 @@ let isSessionActive = false
 let micLevel = 0
 let hasProxyToken = false // Whether the server-side proxy is available
 let stateTimeoutId = null
+let inactivityTimer = null
+
+const resetInactivityTimer = () => {
+  if (inactivityTimer) clearTimeout(inactivityTimer)
+  inactivityTimer = setTimeout(() => {
+    console.log('[App] 15s Inactivity timeout reached.')
+    endSession()
+  }, 50000)
+}
 
 function setState(newState) {
   const state = STATES[newState]
@@ -145,10 +154,13 @@ function wireGeminiCallbacks() {
     connectionStatus.style.opacity = '1'
   }
 
+
   gemini.onAudio = (base64) => {
-    if (currentState === 'listening') {
+    if (!isSessionActive) return
+    if (currentState !== 'responding') {
       setState('responding')
     }
+    resetInactivityTimer() // AI is speaking, reset timer
     audio.playAudio(base64)
   }
 
@@ -156,17 +168,40 @@ function wireGeminiCallbacks() {
     console.log('[App] Barge-in: stopping playback')
     audio.stopPlayback()
     setState('listening')
+    resetInactivityTimer() // User interrupted, reset timer
   }
 
   gemini.onTurnComplete = () => {
     if (isSessionActive) {
       setState('listening')
+      resetInactivityTimer()
     }
   }
 
   gemini.onToolCall = async ({ id, name, args }) => {
     console.log('[App] Tool call:', name, args)
+
+    if (name === 'finalizar_llamada') {
+      console.log('[App] AI requested to hang up. Waiting for audio to finish...')
+      gemini.sendToolResponse(id, name, { success: true })
+
+      const waitForAudioAndEnd = () => {
+        if (audio.isPlaying && isSessionActive) {
+          // Keep waiting
+          setTimeout(waitForAudioAndEnd, 100)
+        } else {
+          // Audio finished or session already ended
+          if (isSessionActive) endSession()
+        }
+      }
+
+      // Give a tiny head start to let the first chunk start playing if it just arrived
+      setTimeout(waitForAudioAndEnd, 500)
+      return
+    }
+
     setState('processing')
+    resetInactivityTimer()
 
     let result
     try {
@@ -186,7 +221,10 @@ function wireGeminiCallbacks() {
     gemini.sendToolResponse(id, name, result)
 
     // Return to listening state (Gemini will speak the response)
-    if (isSessionActive) setState('listening')
+    if (isSessionActive) {
+      setState('listening')
+      resetInactivityTimer()
+    }
   }
 
   gemini.onError = (msg) => {
@@ -233,6 +271,7 @@ async function startSession(auth) {
     await audio.startMic()
     isSessionActive = true
     setState('listening')
+    resetInactivityTimer()
 
   } catch (err) {
     console.error('[App] Connection failed:', err)
@@ -253,6 +292,7 @@ async function startSession(auth) {
 
 function endSession() {
   isSessionActive = false
+  if (inactivityTimer) clearTimeout(inactivityTimer)
   audio.disconnect()
   gemini.disconnect()
   connectionStatus.style.opacity = '0'
