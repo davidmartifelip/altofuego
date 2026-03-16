@@ -59,6 +59,7 @@ let currentState = 'idle'
 let isSessionActive = false
 let micLevel = 0
 let hasProxyToken = false // Whether the server-side proxy is available
+let stateTimeoutId = null
 
 function setState(newState) {
   const state = STATES[newState]
@@ -68,11 +69,13 @@ function setState(newState) {
   body.classList.add(state.className)
   currentState = newState
 
+  if (stateTimeoutId) clearTimeout(stateTimeoutId)
+
   statusText.style.opacity = '0'
   hintText.style.opacity = '0'
 
   // Wait for the fade out to almost complete before switching text
-  setTimeout(() => {
+  stateTimeoutId = setTimeout(() => {
     statusText.textContent = state.label
     hintText.textContent = state.hint
     statusText.style.opacity = '1'

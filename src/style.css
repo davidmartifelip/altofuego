@@ -120,6 +120,11 @@ body {
   color: var(--color-smoke);
 }
 
+/* Prevent animation overlap during JS transitions */
+#status-text[style*="opacity: 0"] {
+  animation: none !important;
+}
+
 @keyframes text-breathe {
 
   0%,
