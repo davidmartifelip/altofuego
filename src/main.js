@@ -17,10 +17,9 @@ const particlesContainer = document.getElementById('particles')
 const connectionStatus = document.getElementById('connection-status')
 
 // Modal elements
-const apiModal = document.getElementById('api-modal')
-const apiKeyInput = document.getElementById('api-key-input')
-const apiKeySubmit = document.getElementById('api-key-submit')
-const apiError = document.getElementById('api-error')
+const errorModal = document.getElementById('error-modal')
+const errorMessage = document.getElementById('error-message')
+const errorClose = document.getElementById('error-close')
 
 // ─── Instances ───
 const gemini = new GeminiLive()
@@ -58,7 +57,6 @@ const STATES = {
 let currentState = 'idle'
 let isSessionActive = false
 let micLevel = 0
-let hasProxyToken = false // Whether the server-side proxy is available
 let stateTimeoutId = null
 let inactivityTimer = null
 
@@ -116,35 +114,15 @@ function setState(newState) {
   }
 }
 
-// ─── API Key Management (fallback) ───
-const API_KEY_STORAGE = 'altofuego_gemini_key'
+// ─── Error Modal Handling ───
 
-function getStoredApiKey() {
-  return localStorage.getItem(API_KEY_STORAGE)
+function showErrorModal(msg) {
+  if (msg) errorMessage.textContent = msg
+  errorModal.classList.remove('hidden')
 }
 
-function storeApiKey(key) {
-  localStorage.setItem(API_KEY_STORAGE, key)
-}
-
-function showModal() {
-  apiModal.classList.remove('hidden')
-  const stored = getStoredApiKey()
-  if (stored) apiKeyInput.value = stored
-  setTimeout(() => apiKeyInput.focus(), 300)
-}
-
-function hideModal() {
-  apiModal.classList.add('hidden')
-}
-
-function showApiError(msg) {
-  apiError.textContent = msg
-  apiError.classList.remove('hidden')
-}
-
-function hideApiError() {
-  apiError.classList.add('hidden')
+function hideErrorModal() {
+  errorModal.classList.add('hidden')
 }
 
 // ─── Connection Flow ───
@@ -230,10 +208,7 @@ function wireGeminiCallbacks() {
   gemini.onError = (msg) => {
     console.error('[App] Gemini error:', msg)
     endSession()
-    if (!hasProxyToken) {
-      showApiError(msg)
-      showModal()
-    }
+    showErrorModal('Se ha perdido la conexión de audio con el asistente. Comprueba tu red.')
   }
 
   gemini.onClose = () => {
@@ -245,20 +220,14 @@ function wireGeminiCallbacks() {
   }
 }
 
-async function startSession(auth) {
+async function startSession() {
   setState('connecting')
-  hideApiError()
+  hideErrorModal()
 
   try {
     wireGeminiCallbacks()
 
-    if (auth.auto) {
-      await gemini.autoConnect()
-    } else {
-      await gemini.connect(auth)
-    }
-
-    hideModal()
+    await gemini.autoConnect()
 
     // Start mic
     audio.onAudioData = (base64Pcm) => {
@@ -276,17 +245,7 @@ async function startSession(auth) {
   } catch (err) {
     console.error('[App] Connection failed:', err)
     setState('idle')
-
-    if (auth.auto) {
-      // Proxy failed — fall back to manual API key
-      console.log('[App] Proxy auth failed, falling back to API key modal')
-      hasProxyToken = false
-      showApiError('Conexión automática fallida. Introduce una API Key.')
-      showModal()
-    } else {
-      showApiError('No se pudo conectar. Verifica tu API Key.')
-      showModal()
-    }
+    showErrorModal('No se ha podido conectar con el asistente. Por favor, desactiva tu bloqueador de anuncios o VPN si tienes alguno activo, y recarga la página.')
   }
 }
 
@@ -300,50 +259,15 @@ function endSession() {
   setState('idle')
 }
 
-// ─── Check if proxy is available ───
-async function checkProxy() {
-  try {
-    const res = await fetch('/api/token', { method: 'GET' })
-    if (res.ok) {
-      hasProxyToken = true
-      console.log('[App] Token proxy available — auto-auth enabled')
-    }
-  } catch {
-    hasProxyToken = false
-    console.log('[App] Token proxy not available — manual API key required')
-  }
-}
-
 // ─── Event Handlers ───
 
-// Modal submit
-apiKeySubmit.addEventListener('click', () => {
-  const key = apiKeyInput.value.trim()
-  if (!key) {
-    showApiError('Introduce una API Key válida')
-    return
-  }
-  storeApiKey(key)
-  startSession({ apiKey: key })
-})
-
-apiKeyInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') apiKeySubmit.click()
-})
+// Modal close
+errorClose.addEventListener('click', hideErrorModal)
 
 // CTA Button
 ctaButton.addEventListener('click', () => {
   if (currentState === 'idle') {
-    if (hasProxyToken) {
-      startSession({ auto: true })
-    } else {
-      const key = getStoredApiKey()
-      if (key) {
-        startSession({ apiKey: key })
-      } else {
-        showModal()
-      }
-    }
+    startSession()
   } else if (isSessionActive) {
     endSession()
   }
@@ -351,18 +275,6 @@ ctaButton.addEventListener('click', () => {
 
 // ─── Initialize ───
 setState('idle')
-
-// Check proxy availability, then decide UI
-checkProxy().then(() => {
-  if (hasProxyToken) {
-    // Proxy available — hide modal, ready to go
-    hideModal()
-  } else if (!getStoredApiKey()) {
-    showModal()
-  } else {
-    hideModal()
-  }
-})
 
 // ─── Canvas: Flame Wave Visualizer ───
 let time = 0
@@ -501,3 +413,6 @@ function spawnParticles() {
 
 setInterval(spawnParticles, 800)
 for (let i = 0; i < 8; i++) setTimeout(createParticle, i * 200)
+
+// Show body once everything is ready
+document.body.style.opacity = '1'

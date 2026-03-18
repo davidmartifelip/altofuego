@@ -92,7 +92,7 @@ export function geminiTokenPlugin() {
 
             // Register middleware
             server.middlewares.use(async (req, res, next) => {
-                if (req.url !== '/api/token') return next()
+                if (req.url !== '/iniciar-sesion') return next()
 
                 try {
                     // Return cached token if still valid
