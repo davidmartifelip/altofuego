@@ -150,6 +150,66 @@
             opacity: 0.8;
             margin-top: 2px;
         }
+
+        /* ─── Mobile Overrides ─── */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFF;
+            font-size: 26px;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+        .mobile-nav-wrapper {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta { display: none !important; }
+            .menu-toggle { display: block; }
+            
+            .mobile-nav-wrapper {
+                display: block;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                z-index: 90;
+            }
+            .mobile-cta {
+                display: block;
+                background: #1A73E8;
+                color: #FFF;
+                text-align: center;
+                padding: 14px;
+                text-decoration: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            .mobile-cta-title { font-size: 15px; font-weight: 600; display: block; }
+            .mobile-cta-sub { font-size: 12px; font-weight: 400; opacity: 0.9; margin-top: 2px; display: block; }
+            
+            .mobile-menu {
+                display: flex;
+                flex-direction: column;
+                background: #111;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .mobile-menu.open {
+                max-height: 250px;
+            }
+            .mobile-menu a {
+                padding: 14px 24px;
+                color: rgba(255,255,255,0.7);
+                text-decoration: none;
+                font-size: 15px;
+                border-top: 1px solid rgba(255,255,255,0.05);
+            }
+            .mobile-menu a.active { color: var(--fire-light); }
+            
+            body { padding-top: 50px; }
+        }
         
         /* ─── Category sticky nav ─── */
         .cat-nav-wrapper {
@@ -521,7 +581,21 @@
             <span class="nav-cta-title">Aplicar al Programa Piloto Abril-Mayo</span>
             <span class="nav-cta-sub">Solo 10 restaurantes</span>
         </a>
+        <button class="menu-toggle" aria-label="Abrir menú" onclick="document.getElementById('mobile-menu').classList.toggle('open')">☰</button>
     </nav>
+
+    <div class="mobile-nav-wrapper">
+        <a href="https://calendar.app.google/Le2hxLjFXuvoeRGc8" target="_blank" class="mobile-cta">
+            <span class="mobile-cta-title">Aplicar al Programa Piloto Abril-Mayo</span>
+            <span class="mobile-cta-sub">Solo 10 restaurantes</span>
+        </a>
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="/">Inicio</a>
+            <a href="/asistente.html">Asistente</a>
+            <a href="/menu.html" class="active">Carta</a>
+            <a href="/nosotros.html">Nosotros</a>
+        </div>
+    </div>
 
     <!-- Category sticky nav (populated by JS) -->
     <div class="cat-nav-wrapper" role="navigation" aria-label="Categorías del menú">
