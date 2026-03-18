@@ -8,13 +8,16 @@
  * The n8n URLs never reach the browser.
  */
 
+import { loadEnv } from 'vite'
+
 export function webhooksPlugin() {
     return {
         name: 'n8n-webhooks-proxy',
 
         configureServer(server) {
-            const DISPONIBILIDAD_URL = process.env.N8N_WEBHOOK_DISPONIBILIDAD
-            const RESERVA_URL = process.env.N8N_WEBHOOK_RESERVA
+            const env = loadEnv(server.config.mode, server.config.envDir || process.cwd(), '')
+            const DISPONIBILIDAD_URL = env.N8N_WEBHOOK_DISPONIBILIDAD
+            const RESERVA_URL = env.N8N_WEBHOOK_RESERVA
 
             if (!DISPONIBILIDAD_URL || !RESERVA_URL) {
                 console.warn('[WebhooksProxy] ⚠️  N8N webhook URLs not set in .env — reservations will fail')

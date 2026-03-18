@@ -8,15 +8,14 @@
 
 /**
  * Execute consultar_disponibilidad
- * @param {{ nombre_cliente: string, fecha: string, hora: string, num_personas: number }} args
+ * @param {{ fecha: string, hora: string, comensales: number }} args
  * @returns {Promise<object>} n8n response
  */
 export async function executeConsultarDisponibilidad(args) {
     const payload = {
-        nombre_cliente: args.nombre_cliente,
         fecha: args.fecha,        // YYYY-MM-DD
         hora: args.hora,          // HH:MM
-        num_personas: Number(args.num_personas),
+        comensales: Number(args.comensales),
     }
 
     console.log('[Reservations] Checking availability:', payload)
@@ -51,16 +50,17 @@ export async function executeConsultarDisponibilidad(args) {
 
 /**
  * Execute crear_reserva
- * @param {{ nombre_cliente: string, fecha: string, hora: string, num_personas: number, telefono?: string, observaciones?: string }} args
+ * @param {{ nombre: string, fecha: string, hora: string, comensales: number, telefono: string, zona: string, observaciones?: string }} args
  * @returns {Promise<object>} n8n response
  */
 export async function executeCrearReserva(args) {
     const payload = {
-        nombre_cliente: args.nombre_cliente,
+        nombre: args.nombre,
         fecha: args.fecha,
         hora: args.hora,
-        num_personas: Number(args.num_personas),
-        ...(args.telefono && { telefono: args.telefono }),
+        comensales: Number(args.comensales),
+        telefono: args.telefono,
+        zona: args.zona,
         ...(args.observaciones && { observaciones: args.observaciones }),
     }
 
