@@ -1,33 +1,27 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description"
-    content="Altofuego — Experiencia gastronómica de lujo. Reserva tu mesa con nuestro asistente virtual." />
+    content="Altofuego — Experiencia gastronómica de lujo con asistente inteligente para reservas sin esperas." />
   <meta name="theme-color" content="#0D0D0D" />
-  <title>Altofuego — Restaurante de Lujo</title>
+  <title>Altofuego — Transformamos la gestión de tus reservas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <style>
     body {
       background-color: #0A0A0A;
       color: #FFFFFF;
     }
-
-    /* Evita que el logo ocupi tota la pantalla abans de carregar Tailwind */
-    #logo-flame {
-      max-width: 56px;
-    }
   </style>
 </head>
 
-<body class="bg-[#0A0A0A] text-white min-h-screen overflow-hidden select-none"
-  style="opacity: 0; transition: opacity 0.4s ease-in;">
+<body class="bg-[#0A0A0A] text-white font-sans" style="opacity: 0; transition: opacity 0.4s ease-in;">
 
   <!-- Top navigation -->
   <style>
@@ -36,7 +30,7 @@
       top: 0;
       left: 0;
       right: 0;
-      z-index: 40;
+      z-index: 50;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -46,14 +40,12 @@
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
-
     .nav-logo {
       display: flex;
       align-items: center;
       gap: 10px;
       text-decoration: none;
     }
-
     .nav-logo-text {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 18px;
@@ -61,17 +53,14 @@
       color: #F5F5F5;
       letter-spacing: 0.02em;
     }
-
     .nav-logo-text span {
       color: #FFB347;
     }
-
     .nav-links {
       display: flex;
       gap: 4px;
       list-style: none;
     }
-
     .nav-links a {
       display: block;
       padding: 7px 14px;
@@ -83,15 +72,44 @@
       transition: all 0.2s;
       letter-spacing: 0.02em;
     }
-
     .nav-links a:hover {
       color: #F5F5F5;
       background: rgba(255, 255, 255, 0.05);
     }
-
     .nav-links a.active {
       color: #FFB347;
       background: rgba(232, 89, 12, 0.1);
+    }
+    .nav-cta {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 20px;
+      border-radius: 20px;
+      background-color: transparent;
+      border: 1px solid #1A73E8;
+      color: #1A73E8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .nav-cta:hover {
+      background-color: rgba(26, 115, 232, 0.15);
+      transform: translate(-50%, -2px);
+    }
+    .nav-cta-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .nav-cta-sub {
+      font-size: 10px;
+      font-weight: 400;
+      opacity: 0.8;
+      margin-top: 2px;
     }
   </style>
   <nav class="top-nav" role="navigation" aria-label="Navegación principal">
@@ -108,135 +126,87 @@
       <span class="nav-logo-text">Alto<span>fuego</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="/" class="active">Asistente</a></li>
+      <li><a href="/" class="active">Inicio</a></li>
+      <li><a href="/asistente.html">Asistente</a></li>
       <li><a href="/menu.html">Carta</a></li>
       <li><a href="/nosotros.html">Nosotros</a></li>
     </ul>
+    <a href="https://calendar.app.google/Le2hxLjFXuvoeRGc8" target="_blank" class="nav-cta">
+      <span class="nav-cta-title">Aplicar al Programa Piloto Abril-Mayo</span>
+      <span class="nav-cta-sub">Solo 10 restaurantes</span>
+    </a>
   </nav>
 
-  <!-- Error Modal -->
-  <div id="error-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm">
-    <div
-      class="modal-card w-full max-w-md mx-6 p-8 rounded-2xl border border-white/10 bg-[#141414]/90 backdrop-blur-xl shadow-2xl">
-      <div class="flex flex-col items-center text-center">
-        <!-- Error icon (small flame) -->
-        <svg viewBox="0 0 60 80" class="w-10 h-auto mb-4 opacity-60" fill="none">
-          <path d="M30 0C30 0 10 25 10 45C10 60 18 72 30 78C42 72 50 60 50 45C50 25 30 0 30 0Z" fill="url(#fg1)" />
-          <defs>
-            <linearGradient id="fg1" x1="30" y1="0" x2="30" y2="78" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stop-color="#FFB347" />
-              <stop offset="1" stop-color="#7C2D12" />
-            </linearGradient>
-          </defs>
+  <main class="w-full">
+    
+    <!-- Sección 1: Hero -->
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 reveal">
+      
+      <!-- Icono Minimalista (Teléfono perdiendo llamada) -->
+      <div class="mb-8 p-4 rounded-full bg-gradient-to-br from-[#1a1a1a] to-[#0A0A0A] border border-white/5 shadow-[0_0_30px_rgba(232,89,12,0.1)]">
+        <svg class="w-12 h-12 text-[#FFB347]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.585 10.585a2 2 0 0 0 2.829 0l5.858-5.859a2 2 0 0 0-2.829-2.828l-5.858 5.859a2 2 0 0 0 0 2.828Z"/>
+          <path d="M16 2v4h-4"/>
+          <path d="m22 2-5.859 5.859"/>
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
         </svg>
-        <h2 class="font-serif text-xl font-semibold mb-2 text-white/90">Problema de conexión</h2>
-        <p id="error-message" class="font-sans text-sm text-white/50 mb-6 leading-relaxed">
-          No se ha podido conectar con el asistente. Por favor, desactiva tu bloqueador de anuncios o VPN si tienes
-          alguno activo, y recarga la página.
-        </p>
-        <button id="error-close"
-          class="w-full py-3 rounded-xl bg-white/10 text-white font-sans text-sm font-medium tracking-wide transition-all hover:bg-white/20 active:scale-[0.98] cursor-pointer">
-          Cerrar
-        </button>
       </div>
-    </div>
-  </div>
 
-  <!-- Ambient particle overlay -->
-  <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
-
-  <!-- Main container -->
-  <main class="relative z-10 flex flex-col items-center justify-center min-h-[100dvh] px-6">
-
-    <!-- Connection status dot -->
-    <div id="connection-status"
-      class="absolute top-20 md:top-6 right-6 flex items-center gap-2 opacity-0 transition-opacity duration-500">
-      <span id="status-dot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
-      <span class="font-sans text-[11px] text-white/30 tracking-wider">CONECTADO</span>
-    </div>
-
-    <!-- Top tagline -->
-    <p id="tagline"
-      class="font-sans text-[10px] md:text-xs tracking-[0.35em] uppercase text-white/30 mb-4 md:mb-8 transition-opacity duration-700">
-      Experiencia Gastronómica
-    </p>
-
-    <!-- Logo -->
-    <div id="logo-container" class="flex flex-col items-center mb-4 md:mb-10 transition-all duration-700">
-      <svg id="logo-flame" viewBox="0 0 60 80"
-        class="w-10 md:w-14 h-auto mb-2 md:mb-4 drop-shadow-[0_0_20px_rgba(232,89,12,0.3)]" fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 0C30 0 10 25 10 45C10 60 18 72 30 78C42 72 50 60 50 45C50 25 30 0 30 0Z"
-          fill="url(#flame-gradient)" />
-        <path d="M30 20C30 20 20 35 20 48C20 58 24 65 30 68C36 65 40 58 40 48C40 35 30 20 30 20Z"
-          fill="url(#flame-inner)" opacity="0.8" />
-        <defs>
-          <linearGradient id="flame-gradient" x1="30" y1="0" x2="30" y2="78" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#FFB347" />
-            <stop offset="0.5" stop-color="#E8590C" />
-            <stop offset="1" stop-color="#7C2D12" />
-          </linearGradient>
-          <linearGradient id="flame-inner" x1="30" y1="20" x2="30" y2="68" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#FDE68A" />
-            <stop offset="0.6" stop-color="#FFB347" />
-            <stop offset="1" stop-color="#E8590C" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <h1 class="font-serif text-4xl md:text-5xl font-semibold tracking-wide text-white">
-        Alto<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FFB347] to-[#E8590C]">fuego</span>
+      <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 max-w-4xl leading-tight">
+        El 60% de los clientes no vuelve a llamar si da <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FFB347] to-[#E8590C]">señal de ocupado.</span>
+        <br/>
+        <span class="text-3xl md:text-5xl lg:text-5xl text-white/90 mt-4 block">¿Seguro que tu equipo contesta siempre a la primera?</span>
       </h1>
-    </div>
+      
+      <h2 class="font-sans text-xl md:text-2xl font-light text-white/50 mb-12 max-w-3xl">
+        Altofuego garantiza <strong class="font-medium text-[#FFB347]">cero esperas</strong> y <strong class="font-medium text-[#FFB347]">100% de efectividad</strong>.
+      </h2>
 
-    <!-- Canvas wave visualizer -->
-    <div id="canvas-wrapper" class="relative w-full max-w-lg mb-4 md:mb-10">
-      <canvas id="flame-visualizer" class="w-full h-20 md:h-36 rounded-2xl"></canvas>
-      <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#E8590C]/5 to-transparent pointer-events-none">
+      <a href="/asistente.html" class="group relative flex items-center justify-center px-10 py-5 rounded-full bg-gradient-to-r from-[#E8590C] to-[#C2410C] font-sans text-base font-semibold tracking-wide text-white transition-all duration-300 hover:shadow-[0_0_50px_rgba(232,89,12,0.4)] hover:scale-105 active:scale-95">
+        PRUEBA NUESTRO ASISTENTE
+        <svg class="ml-3 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </section>
+
+    <!-- Sección 2: Prueba Social - Video -->
+    <section class="min-h-[90vh] flex flex-col justify-center items-center text-center px-6 pb-20 reveal">
+      <h2 class="font-serif text-3xl md:text-5xl font-bold text-white mb-12">TE LO ENSEÑAMOS</h2>
+      
+      <!-- Video Container -->
+      <div class="relative w-full max-w-5xl aspect-video rounded-3xl bg-[#141414] border border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.8)] overflow-hidden group cursor-pointer mb-8">
+        <!-- Overlay oscuro y botón play -->
+        <div class="absolute inset-0 bg-black/40 flex items-center justify-center transition-all duration-500 group-hover:bg-black/20">
+          <div class="w-20 h-20 bg-[#E8590C]/90 rounded-full flex items-center justify-center backdrop-blur-sm shadow-[0_0_30px_rgba(232,89,12,0.5)] transition-transform duration-300 group-hover:scale-110">
+            <svg class="w-8 h-8 text-white ml-1" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5 3l14 9-14 9V3z"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Placeholder imagen fondo - Opcional -->
+        <div class="w-full h-full bg-gradient-to-br from-[#1a1a1a] to-[#0A0A0A]"></div>
       </div>
-    </div>
 
-    <!-- Status Capsule -->
-    <div
-      class="status-capsule flex flex-col items-center justify-center w-full max-w-sm mx-auto mb-6 md:mb-10 min-h-[100px] px-6 py-4 rounded-[32px] border border-white/5 bg-[#0D0D0D]/80 backdrop-blur-xl transition-all duration-500">
-      <p id="status-text"
-        class="font-sans text-sm md:text-base text-white/50 min-h-[1.5em] transition-all duration-500 tracking-wide text-center">
-        Listo para hablar
+      <p class="font-sans text-base md:text-lg text-white/40 max-w-2xl font-light">
+        Descubre en 2 minutos cómo Altofuego puede transformar la gestión de tus reservas.
       </p>
-      <p id="hint-text" class="font-sans text-[11px] text-white/20 mt-2 tracking-wider transition-opacity duration-500">
-        Toca para reservar tu experiencia
-      </p>
-    </div>
-
-    <!-- CTA Button -->
-    <button id="cta-button" class="group relative cursor-pointer" aria-label="Activar asistente de voz">
-      <span id="pulse-ring"
-        class="absolute inset-0 rounded-full bg-[#E8590C]/20 scale-100 transition-transform duration-700"></span>
-      <span
-        class="relative flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#E8590C] to-[#C2410C] shadow-[0_0_40px_rgba(232,89,12,0.3)] transition-all duration-300 group-hover:shadow-[0_0_60px_rgba(232,89,12,0.5)] group-hover:scale-105 group-active:scale-95">
-        <!-- Mic icon -->
-        <svg id="mic-icon" class="w-8 h-8 md:w-10 md:h-10 text-white transition-all duration-300" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-          <line x1="12" y1="19" x2="12" y2="22" />
-        </svg>
-        <!-- Stop icon (hidden) -->
-        <svg id="stop-icon" class="hidden w-8 h-8 md:w-10 md:h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
-          <rect x="6" y="6" width="12" height="12" rx="2" />
-        </svg>
-        <!-- Processing spinner -->
-        <svg id="spinner-icon" class="hidden w-8 h-8 md:w-10 md:h-10 text-white animate-spin" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" stroke-opacity="0.25" />
-          <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1" />
-        </svg>
-      </span>
-    </button>
-
+    </section>
 
   </main>
 
-  <script type="module" src="/src/main.js"></script>
+  <!-- Pie de página -->
+  <footer class="w-full py-10 px-6 border-t border-white/5 bg-[#0D0D0D]">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <p class="font-sans text-sm text-white/30">
+        &copy; 2026 Altofuego. Todos los derechos reservados.
+      </p>
+      <div class="flex items-center gap-6">
+        <a href="#" class="font-sans text-sm text-white/30 hover:text-white transition-colors">LinkedIn</a>
+        <a href="#" class="font-sans text-sm text-white/30 hover:text-white transition-colors">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/landing.js"></script>
 </body>
 
 </html>

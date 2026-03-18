@@ -252,3 +252,15 @@ body {
 #flame-visualizer {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ── Landing Page Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

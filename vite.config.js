@@ -16,6 +16,7 @@ export default {
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        asistente: resolve(__dirname, 'asistente.html'),
         menu: resolve(__dirname, 'menu.html'),
         nosotros: resolve(__dirname, 'nosotros.html'),
       }

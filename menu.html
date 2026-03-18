@@ -119,6 +119,38 @@
             background: rgba(232, 89, 12, 0.1);
         }
 
+        .nav-cta {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 20px;
+            border-radius: 20px;
+            background-color: transparent;
+            border: 1px solid #1A73E8;
+            color: #1A73E8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-cta:hover {
+            background-color: rgba(26, 115, 232, 0.15);
+            transform: translate(-50%, -2px);
+        }
+        .nav-cta-title {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .nav-cta-sub {
+            font-size: 10px;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
         /* ─── Category sticky nav ─── */
         .cat-nav-wrapper {
             position: sticky;
@@ -480,10 +512,15 @@
             <span class="nav-logo-text">Alto<span>fuego</span></span>
         </a>
         <ul class="nav-links">
-            <li><a href="/">Asistente</a></li>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/asistente.html">Asistente</a></li>
             <li><a href="/menu.html" class="active">Carta</a></li>
             <li><a href="/nosotros.html">Nosotros</a></li>
         </ul>
+        <a href="https://calendar.app.google/Le2hxLjFXuvoeRGc8" target="_blank" class="nav-cta">
+            <span class="nav-cta-title">Aplicar al Programa Piloto Abril-Mayo</span>
+            <span class="nav-cta-sub">Solo 10 restaurantes</span>
+        </a>
     </nav>
 
     <!-- Category sticky nav (populated by JS) -->
