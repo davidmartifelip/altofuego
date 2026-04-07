@@ -130,6 +130,7 @@ function wireGeminiCallbacks() {
   gemini.onSetupComplete = () => {
     console.log('[App] Gemini session ready')
     connectionStatus.style.opacity = '1'
+    gemini.sendText("Hola, empieza la conversación conmigo siguiendo tus instrucciones de saludo.")
   }
 
 
