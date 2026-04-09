@@ -16,7 +16,7 @@ export function retellPlugin() {
 
         req.on('end', async () => {
           try {
-            // Load environment variables using Vite's built-in loader
+            // Load environment variables using Vite's built-in loader 
             const env = loadEnv(server.config.mode, process.cwd(), '')
             const apiKey = env.RETELL_API_KEY
 
@@ -59,7 +59,7 @@ export function retellPlugin() {
             }
 
             const responseData = await response.json()
-            
+
             res.statusCode = 200
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ access_token: responseData.access_token }))
