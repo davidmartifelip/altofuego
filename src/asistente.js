@@ -2,6 +2,7 @@ import './style.css'
 import { GeminiLive } from './gemini-live.js'
 import { AudioManager } from './audio-manager.js'
 import { executeConsultarDisponibilidad, executeCrearReserva } from './reservations.js'
+import { RetellWebClient } from 'retell-client-js-sdk'
 
 // ─── DOM Elements ───
 const body = document.body
@@ -24,6 +25,7 @@ const errorClose = document.getElementById('error-close')
 // ─── Instances ───
 const gemini = new GeminiLive()
 const audio = new AudioManager()
+const retellClient = new RetellWebClient()
 
 // ─── State Machine ───
 const STATES = {
@@ -221,11 +223,45 @@ function wireGeminiCallbacks() {
   }
 }
 
+function wireRetellCallbacks() {
+  retellClient.on('call_started', () => {
+    console.log('[Retell] Call started')
+    connectionStatus.style.opacity = '1'
+  })
+
+  retellClient.on('call_ended', () => {
+    console.log('[Retell] Call ended')
+    if (isSessionActive) {
+      endSession()
+    }
+  })
+
+  retellClient.on('agent_start_talking', () => {
+    if (!isSessionActive) return
+    setState('responding')
+    resetInactivityTimer()
+  })
+
+  retellClient.on('agent_stop_talking', () => {
+    if (!isSessionActive) return
+    setState('listening')
+    resetInactivityTimer()
+  })
+
+  retellClient.on('error', (error) => {
+    console.error('[Retell] Error:', error)
+    endSession()
+    showErrorModal('No se ha podido conectar con el asistente de voz. Por favor, reinténtalo.')
+  })
+}
+
 async function startSession() {
   setState('connecting')
   hideErrorModal()
 
   try {
+    /* 
+    // ---- GEMINI ORIGINAL ----
     wireGeminiCallbacks()
 
     await gemini.autoConnect()
@@ -239,6 +275,28 @@ async function startSession() {
     }
 
     await audio.startMic()
+    */
+
+    // ---- RETELL AI ----
+    const agentId = 'agent_c3b6426d3ddb3192a64437e723' // TODO: Set your agent ID here
+    const response = await fetch('/api/make-call', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent_id: agentId })
+    })
+
+    if (!response.ok) {
+      throw new Error(`Error en el backend: ${response.status}`)
+    }
+
+    const data = await response.json()
+    const accessToken = data.access_token
+
+    wireRetellCallbacks()
+    await retellClient.startCall({
+      accessToken: accessToken,
+    })
+
     isSessionActive = true
     setState('listening')
     resetInactivityTimer()
@@ -253,8 +311,16 @@ async function startSession() {
 function endSession() {
   isSessionActive = false
   if (inactivityTimer) clearTimeout(inactivityTimer)
-  audio.disconnect()
-  gemini.disconnect()
+
+  // audio.disconnect()
+  // gemini.disconnect()
+
+  try {
+    retellClient.stopCall()
+  } catch (e) {
+    console.error('Error stopping retell', e)
+  }
+
   connectionStatus.style.opacity = '0'
   micLevel = 0
   setState('idle')
