@@ -286,7 +286,9 @@ async function startSession() {
     })
 
     if (!response.ok) {
-      throw new Error(`Error en el backend: ${response.status}`)
+      const errorText = await response.text()
+      console.error('[App] Detalls error backend:', errorText)
+      throw new Error(`Error en el backend: ${response.status} - ${errorText}`)
     }
 
     const data = await response.json()

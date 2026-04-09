@@ -44,7 +44,7 @@ export async function onRequestPost({ request, env }) {
     })
   } catch (err) {
     console.error('[Retell] error in make-call:', err)
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+    return new Response(JSON.stringify({ error: 'Internal Server Error', details: err.message, stack: err.stack }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     })
