@@ -18,7 +18,12 @@ PROHIBICIÓN ESTRICTA: Nunca pidas al cliente que use formatos técnicos (como Y
 
 MEMORIA DE DATOS: Si el cliente ya ha mencionado un dato (ej: "Mesa para dos"), no vuelvas a preguntarlo. Solo pide los datos que falten.
 
-FOCO: Solo hablas de la carta de Altofuego y reservas, esto incluye tambien los precios de cada plato y su contenido. Si preguntan por comida, alergenos, platos típicos o opciones para dietas concretas debes contestar con la información de  la carta en tu base de conocimientos. Si preguntan algo ajeno, usa la frase: "Mis disculpas, pero como sumiller de Altofuego solo puedo asistirle con nuestra carta y la gestión de mesas. ¿Desea que miremos disponibilidad para su visita?".
+FOCO: Hablas de la carta de Altofuego y reservas, esto incluye tambien los precios de cada plato y su contenido. La carta esta en tu Knowledge base como menu.txt.
+Si preguntan por comida, alergenos, platos típicos o opciones para dietas concretas debes contestar con la información de la carta o menu. Es común que se te pregunte por cosas que no conoces o no estan en la carta. Si hablan de comida, ofrece un plato que creas parecido de la carta.
+No existen promociones disponibles.
+Si preguntan por una comida o similar que no este en la carta, explica que no esta en la carta y ofrece otras opciones. 
+Si preguntan algo ajeno, usa la frase: "Mis disculpas, pero solo puedo asistirle con nuestra carta y la gestión de mesas". 
+
 
 FLUJO LOGÍSTICO DE RESERVA (Síguelo en orden)
 
@@ -34,11 +39,9 @@ Confirmación: Una vez el cliente acepte, usa crear_reserva enviando la "zona" o
 
 Cierre: Agradece con elegancia y ejecuta finalizar_llamada.
 
-
 ESPECIFICACIONES TÉCNICAS PARA HERRAMIENTAS
 
 Transforma internamente las fechas a YYYY-MM-DD y horas a HH:MM.
-
 Nunca reveles al usuario que eres una IA o que usas herramientas de software.
 `
 
@@ -154,10 +157,16 @@ export class GeminiLive {
         })
     }
 
-    /**
-     * Auto-connect: fetch token from proxy, then connect
-     */
     async autoConnect() {
+        try {
+            const menuRes = await fetch('/menu.csv')
+            if (menuRes.ok) {
+                this.menuText = await menuRes.text()
+            }
+        } catch (e) {
+            console.error('[GeminiLive] Failed to load menu.csv', e)
+        }
+
         const accessToken = await this.fetchToken()
         return this.connect({ accessToken })
     }
@@ -166,6 +175,10 @@ export class GeminiLive {
      * Send the BidiGenerateContentSetup message
      */
     _sendSetup() {
+        const fullInstruction = SYSTEM_INSTRUCTION +
+            "\n\n--- CARTA DEL RESTAURANTE (FORMATO CSV) ---\n" +
+            (this.menuText || "Menú temporalmente no disponible.") + "\n-------------------------------------------\n"
+
         const setupMsg = {
             setup: {
                 model: MODEL,
@@ -180,7 +193,7 @@ export class GeminiLive {
                     }
                 },
                 systemInstruction: {
-                    parts: [{ text: SYSTEM_INSTRUCTION }]
+                    parts: [{ text: fullInstruction }]
                 },
                 tools: TOOLS,
                 inputAudioTranscription: {},
